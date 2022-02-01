@@ -26,16 +26,13 @@ def receive_messages():
 
 def write_messages():
     while True:
-        print("estoy corriendo y no se porque")
         messg = f"{input('')}"
         if len(messg) >= 7 and messg[:7].upper() == "PRIVATE":
             usr = str(input('Escriba el nombre del usuario: '))
             msg = str(input('Escriba el mensaje: '))
             message = f"PRIVATE{len(usr):03}{usr}{username} envio por mensaje privado: {msg}"
-            print(message)
         else:
             message = f"{username}: {messg}"
-            print("aca")
         client.send(message.encode('utf-8'))
 
 receive_thread = threading.Thread(target=receive_messages)

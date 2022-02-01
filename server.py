@@ -21,34 +21,25 @@ def broadcast(message, _client):
             client.send(message)
 
 def sendPrivateMessage(message, client):
-    pass
+    client.send(message)
 
 def handle_messages(client):
     while True:
         try:
-            print(clients[0])
-            print(type(clients[0]))
             message = client.recv(1024)
             massage = str(message.decode("utf-8"))
-            print("El mensaje")
-            print(massage)
-            print(type(massage))
             if massage[:7] == "PRIVATE":
                 #7 tamaño de PRIVATE + 3 digitos forzados al len  = 10 luego quitamos los primeros 7
                 sizeOfUsr = int((massage[:10])[7:])
                 clientToSend = (massage[:10+sizeOfUsr])[10:]
-                print(clientToSend)
-                print(sizeOfUsr)
-                index = usernames.index(clientToSend)
-                msg = massage[10+sizeOfUsr:]
                 try:
                     index = usernames.index(clientToSend)
                     msg = massage[10+sizeOfUsr:]
-                    print(msg)
+                    sendPrivateMessage(msg.encode('utf-8', 'ignore'), clients[index])
                 except:
-                    sendPrivateMessage(f"usuario: incorrecto".encode('utf-8'), client) 
-            print("se envio")
-            broadcast(message, client)
+                    sendPrivateMessage(f"usuario incorrecto".encode('utf-8', 'ignore'), client) 
+            else:
+                broadcast(message, client)
         except:
             index = clients.index(client)
             username = usernames[index]
